@@ -1,0 +1,130 @@
+:root {
+  --bg: #f4f5f7;
+  --header-bg: #1f2d3d;
+  --header-text: #ffffff;
+  --column-bg: #ebecf0;
+  --card-bg: #ffffff;
+  --card-border: #dcdfe4;
+  --muted: #6b778c;
+  --text: #172b4d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--header-bg);
+  color: var(--header-text);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: var(--column-bg);
+  border-radius: 8px;
+  width: 280px;
+  flex: 0 0 280px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 4px;
+}
+
+.column-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.1);
+  position: relative;
+}
+
+.card-title {
+  font-size: 14px;
+  margin: 0 0 4px 0;
+  word-break: break-word;
+}
+
+.card-due {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.priority-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 10px;
+  line-height: 1.6;
+}
+
+.priority-high {
+  background: #fde2e1;
+  color: #b42318;
+}
+
+.priority-medium {
+  background: #fef0c7;
+  color: #93670c;
+}
+
+.priority-low {
+  background: #e4f3e6;
+  color: #1a7f37;
+}
