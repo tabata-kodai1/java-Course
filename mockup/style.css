@@ -1,0 +1,336 @@
+:root {
+  --bg: #f4f5f7;
+  --header-bg: #1f2d3d;
+  --header-text: #ffffff;
+  --column-bg: #ebecf0;
+  --card-bg: #ffffff;
+  --card-border: #dcdfe4;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --text: #172b4d;
+  --muted: #6b778c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--header-bg);
+  color: var(--header-text);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sort-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sort-label {
+  font-size: 13px;
+  color: #c9ccd3;
+  margin-right: 2px;
+}
+
+.sort-actions .btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.sort-actions .btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.sort-actions .btn.active {
+  background: var(--primary);
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: #e2e4e9;
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: #d3d6dc;
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+}
+.btn-danger:hover {
+  color: var(--danger-hover);
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  align-items: flex-start;
+  min-height: calc(100vh - 60px);
+}
+
+.column {
+  background: var(--column-bg);
+  border-radius: 8px;
+  width: 280px;
+  flex: 0 0 280px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+.column.drag-over {
+  outline: 2px dashed var(--primary);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 4px;
+}
+
+.column-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: text;
+}
+
+.column-title:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.column-title-input {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--primary);
+  font-family: inherit;
+}
+
+.column-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 6px;
+}
+.column-delete-btn:hover {
+  color: var(--danger);
+}
+
+.add-card-btn {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.add-card-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: grab;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.1);
+  position: relative;
+}
+
+.card.dragging {
+  opacity: 0.4;
+}
+
+.card-title {
+  font-size: 14px;
+  margin: 0 0 4px 0;
+  padding-right: 20px;
+  word-break: break-word;
+}
+
+.card-due {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.priority-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 10px;
+  line-height: 1.6;
+}
+
+.priority-high {
+  background: #fde2e1;
+  color: #b42318;
+}
+
+.priority-medium {
+  background: #fef0c7;
+  color: #93670c;
+}
+
+.priority-low {
+  background: #e4f3e6;
+  color: #1a7f37;
+}
+
+.card-delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 4px;
+}
+.card-delete-btn:hover {
+  color: var(--danger);
+}
+
+.card-list.drag-over-slot {
+  background: rgba(37, 99, 235, 0.06);
+  border-radius: 6px;
+}
+
+/* モーダル */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 30, 66, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 420px;
+}
+
+.modal h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.modal label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.modal .required {
+  color: var(--danger);
+  font-weight: 400;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.modal input[type="text"],
+.modal input[type="date"],
+.modal textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

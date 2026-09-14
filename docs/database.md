@@ -22,6 +22,7 @@ erDiagram
         string title
         string description
         string due_date
+        string priority
         integer position
     }
 ```
@@ -45,6 +46,7 @@ erDiagram
 | title | TEXT | カードの名前（必須） |
 | description | TEXT | カードの詳細メモ（任意） |
 | due_date | TEXT | 締め切り日（任意） |
+| priority | TEXT | 優先度（"high" / "medium" / "low"、任意、未指定時は"medium"） |
 | position | INTEGER | 列内でのカードの表示順 |
 
 属性の詳細な説明は「4. データ項目一覧」も参照。
@@ -75,4 +77,5 @@ columns
 | | タイトル | カードの名前（必須） |
 | | 説明文 | カードの詳細メモ（任意） |
 | | 期日 | 締め切り日（任意） |
-| | 表示順 | 同じ列内でのカードの並び順を保持する値 |
+| | 優先度 | 高・中・低の3段階（任意、未指定時は「中」）。「優先度順」ボタンによる一括並び替えの基準として使う |
+| | 表示順 | 同じ列内でのカードの並び順を保持する値。通常はドラッグ＆ドロップで自由に変更でき、並び替えボタン押下時のみ一括更新される |

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>タスク管理アプリ（モック）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="app-title">タスク管理アプリ</h1>
+    <div class="header-actions">
+      <div class="sort-actions">
+        <span class="sort-label">並び替え:</span>
+        <button id="sort-priority-btn" class="btn btn-secondary">優先度順</button>
+        <button id="sort-due-btn" class="btn btn-secondary">期限順</button>
+      </div>
+      <button id="add-column-btn" class="btn btn-primary">＋ 列を追加</button>
+    </div>
+  </header>
+
+  <main id="board" class="board"></main>
+
+  <!-- カード追加／編集モーダル -->
+  <div id="card-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2 id="card-modal-title">カードを追加</h2>
+      <form id="card-form">
+        <label>
+          タイトル<span class="required">必須</span>
+          <input type="text" id="card-title-input" required maxlength="100">
+        </label>
+        <label>
+          説明文
+          <textarea id="card-desc-input" rows="3" maxlength="500"></textarea>
+        </label>
+        <label>
+          期日
+          <input type="date" id="card-due-input">
+        </label>
+        <label>
+          優先度
+          <select id="card-priority-input">
+            <option value="low">低</option>
+            <option value="medium" selected>中</option>
+            <option value="high">高</option>
+          </select>
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="card-cancel-btn" class="btn btn-secondary">キャンセル</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
