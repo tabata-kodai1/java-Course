@@ -3,6 +3,7 @@ package com.example.kanban;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,8 +16,8 @@ public class ColumnController {
 	}
 
 	@GetMapping("/api/columns")
-	public List<ColumnResponse> getColumns() {
-		return columnService.getColumns();
+	public List<ColumnResponse> getColumns(@RequestParam(required = false) String q) {
+		return columnService.getColumns(q);
 	}
 
 }

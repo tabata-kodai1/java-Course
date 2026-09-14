@@ -14,9 +14,11 @@ export function Column({ column }: ColumnProps) {
         <div className="column-title">{column.title}</div>
       </div>
       <div className="card-list">
-        {sortedCards.map((card) => (
-          <Card key={card.id} card={card} />
-        ))}
+        {sortedCards.length === 0 ? (
+          <p className="card-list-empty">該当するカードがありません</p>
+        ) : (
+          sortedCards.map((card) => <Card key={card.id} card={card} />)
+        )}
       </div>
     </section>
   );
