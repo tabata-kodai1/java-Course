@@ -16,14 +16,47 @@
 | Java + Spring Boot（Gradle、バックエンドAPI） | 実務で広く使われるJava／Spring Bootの設計・実装（DIコンテナ、REST API実装等）を学ぶため。ビルドツールはGradleを使用する |
 | PostgreSQL（データベース） | 本格的なDBサーバーを用いた設計・構築・運用を学ぶため |
 
-### 未決定事項（保留）
+### 決定事項（実装フェーズで確定）
 
-以下は現時点では未決定であり、実装フェーズ着手前に別途決定する。
+企画段階では保留していた以下の事項は、実装フェーズ着手時に決定した。
 
-- **DBアクセス方式**：Spring Data JPA（ORM）とSpring JDBC（JdbcTemplate）のどちらを採用するか
-- **PostgreSQLの実行環境**：Docker Composeで構築するか、ローカルに直接インストールするか
+- **DBアクセス方式**：Spring Data JPA（ORM）を採用
+- **PostgreSQLの実行環境**：Docker Composeで構築
 
-## 3. 検討した代替案と不採用理由
+## 3. 実装バージョン
+
+実装フェーズで確定した、各技術・ツールの具体的なバージョンは以下の通り。
+
+### バックエンド（`backend/`）
+
+| 項目 | バージョン | 参照元 |
+|---|---|---|
+| Java | 25 | `backend/build.gradle`（toolchain） |
+| Spring Boot | 4.1.1 | `backend/build.gradle` |
+| Gradle | 9.7.1 | `backend/gradle/wrapper/gradle-wrapper.properties` |
+| ビルドツール | Gradle（Groovy DSL） | `backend/build.gradle` |
+| DBアクセス | Spring Data JPA | `backend/build.gradle` |
+| DBドライバ | org.postgresql:postgresql（実行時） | `backend/build.gradle` |
+
+### フロントエンド（`frontend/`）
+
+| 項目 | バージョン | 参照元 |
+|---|---|---|
+| React | ^19.3.0 | `frontend/package.json` |
+| React DOM | ^19.3.0 | `frontend/package.json` |
+| TypeScript | ^7.0.2 | `frontend/package.json` |
+| Vite | ^8.3.0 | `frontend/package.json` |
+| @vitejs/plugin-react | ^6.1.1 | `frontend/package.json` |
+| Lintツール | oxlint ^1.81.0 | `frontend/package.json` |
+
+### データベース
+
+| 項目 | バージョン | 参照元 |
+|---|---|---|
+| PostgreSQL | 16-alpine | `docker-compose.yml` |
+| 実行環境 | Docker Compose | `docker-compose.yml` |
+
+## 4. 検討した代替案と不採用理由
 
 | 代替案 | 不採用理由 |
 |---|---|
