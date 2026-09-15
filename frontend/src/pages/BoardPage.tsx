@@ -32,7 +32,9 @@ export function BoardPage() {
       <AppHeader searchValue={searchInput} onSearchChange={setSearchInput} />
       {error && <p style={{ padding: 20, color: '#dc2626' }}>読み込みエラー: {error}</p>}
       {!error && columns === null && <p style={{ padding: 20 }}>読み込み中...</p>}
-      {!error && columns !== null && <Board columns={columns} onCardCreated={fetchColumns} />}
+      {!error && columns !== null && (
+        <Board columns={columns} onCardCreated={fetchColumns} onCardUpdated={fetchColumns} />
+      )}
     </>
   );
 }

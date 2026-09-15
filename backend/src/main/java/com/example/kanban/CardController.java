@@ -3,6 +3,7 @@ package com.example.kanban;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,16 @@ public class CardController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public CardResponse createCard(@PathVariable Long columnId, @Valid @RequestBody CardCreateRequest request) {
 		return cardService.createCard(columnId, request);
+	}
+
+	@PatchMapping("/api/cards/{cardId}")
+	public CardResponse updateCard(@PathVariable Long cardId, @Valid @RequestBody CardUpdateRequest request) {
+		return cardService.updateCard(cardId, request);
+	}
+
+	@PatchMapping("/api/cards/{cardId}/move")
+	public CardResponse moveCard(@PathVariable Long cardId, @Valid @RequestBody CardMoveRequest request) {
+		return cardService.moveCard(cardId, request);
 	}
 
 }
