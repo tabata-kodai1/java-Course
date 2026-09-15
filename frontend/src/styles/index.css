@@ -79,6 +79,30 @@ body {
   border-radius: 4px;
 }
 
+.column-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.column-sort-button {
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.column-sort-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .card-list {
   display: flex;
   flex-direction: column;

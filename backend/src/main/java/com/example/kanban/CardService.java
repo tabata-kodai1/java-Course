@@ -1,6 +1,7 @@
 package com.example.kanban;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -106,6 +107,57 @@ public class CardService {
 			toSave.add(c);
 		}
 		cardRepository.saveAll(toSave);
+	}
+
+	@Transactional
+	public List<CardResponse> bulkUpdateCards(CardBulkUpdateRequest request) {
+		if (!request.hasUpdate()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "priority or dueDate must be provided");
+		}
+
+		List<Card> cards = cardRepository.findByIdIn(request.cardIds());
+		if (cards.size() != request.cardIds().size()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "One or more cards not found");
+		}
+
+		for (Card card : cards) {
+			if (request.priority() != null && !request.priority().isBlank()) {
+				card.setPriority(request.priority());
+			}
+			if (request.dueDate() != null) {
+				card.setDueDate(request.dueDate());
+			}
+		}
+
+		return cardRepository.saveAll(cards).stream().map(CardResponse::from).toList();
+	}
+
+	@Transactional
+	public List<CardResponse> sortColumnByDueDate(Long columnId) {
+		columnRepository.findById(columnId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Column not found: " + columnId));
+
+		List<Card> cards = cardRepository.findByColumnIdOrderByPositionAsc(columnId);
+		cards.sort(Comparator.comparing(
+				Card::getDueDate,
+				Comparator.nullsLast(Comparator.naturalOrder())));
+
+		renumber(cards);
+		return cards.stream().map(CardResponse::from).toList();
+	}
+
+	private static final List<String> PRIORITY_ORDER = List.of("low", "medium", "high");
+
+	@Transactional
+	public List<CardResponse> sortColumnByPriority(Long columnId) {
+		columnRepository.findById(columnId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Column not found: " + columnId));
+
+		List<Card> cards = cardRepository.findByColumnIdOrderByPositionAsc(columnId);
+		cards.sort(Comparator.comparingInt(c -> PRIORITY_ORDER.indexOf(c.getPriority())));
+
+		renumber(cards);
+		return cards.stream().map(CardResponse::from).toList();
 	}
 
 }

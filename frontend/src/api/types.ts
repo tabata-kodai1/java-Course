@@ -27,6 +27,12 @@ export interface CardMoveRequest {
   position: number;
 }
 
+export interface CardBulkUpdateRequest {
+  cardIds: number[];
+  dueDate?: string;
+  priority?: string;
+}
+
 export interface ColumnResponse {
   id: number;
   title: string;
