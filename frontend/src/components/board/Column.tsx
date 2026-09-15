@@ -1,5 +1,5 @@
-import { useRef, type DragEvent } from 'react';
-import { moveCard } from '../../api/cards';
+import { useRef, useState, type DragEvent } from 'react';
+import { moveCard, sortColumnByDueDate, sortColumnByPriority } from '../../api/cards';
 import type { ColumnResponse } from '../../api/types';
 import { Card } from './Card';
 import { CardCreateForm } from './CardCreateForm';
@@ -13,6 +13,7 @@ interface ColumnProps {
 export function Column({ column, onCardCreated, onCardUpdated }: ColumnProps) {
   const sortedCards = [...column.cards].sort((a, b) => a.position - b.position);
   const listRef = useRef<HTMLDivElement>(null);
+  const [isBusy, setIsBusy] = useState(false);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -51,10 +52,56 @@ export function Column({ column, onCardCreated, onCardUpdated }: ColumnProps) {
     }
   };
 
+  const handleSortByDueDate = async () => {
+    if (sortedCards.length < 2 || isBusy) return;
+    setIsBusy(true);
+    try {
+      await sortColumnByDueDate(column.id);
+      onCardUpdated();
+    } catch (err) {
+      console.error('期限順の並び替えに失敗しました', err);
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const handleSortByPriority = async () => {
+    if (sortedCards.length < 2 || isBusy) return;
+    setIsBusy(true);
+    try {
+      await sortColumnByPriority(column.id);
+      onCardUpdated();
+    } catch (err) {
+      console.error('優先度順の並び替えに失敗しました', err);
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   return (
     <section className="column">
       <div className="column-header">
         <div className="column-title">{column.title}</div>
+        <div className="column-actions">
+          <button
+            type="button"
+            className="column-sort-button"
+            disabled={sortedCards.length < 2 || isBusy}
+            onClick={handleSortByDueDate}
+            title="このカラムのカードを期限の早い順に並び替え"
+          >
+            期限順
+          </button>
+          <button
+            type="button"
+            className="column-sort-button"
+            disabled={sortedCards.length < 2 || isBusy}
+            onClick={handleSortByPriority}
+            title="このカラムのカードを優先度の低い順に並び替え"
+          >
+            優先度順
+          </button>
+        </div>
       </div>
       <div className="card-list" ref={listRef} onDragOver={handleDragOver} onDrop={handleDrop}>
         {sortedCards.length === 0 ? (

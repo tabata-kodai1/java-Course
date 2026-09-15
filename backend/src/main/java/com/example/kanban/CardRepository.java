@@ -14,4 +14,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
 	List<Card> findByColumnIdOrderByPositionAsc(Long columnId);
 
+	List<Card> findByIdIn(List<Long> ids);
+
 }
