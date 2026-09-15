@@ -14,6 +14,19 @@ export interface CardCreateRequest {
   priority?: string;
 }
 
+export interface CardUpdateRequest {
+  title: string;
+  description?: string;
+  dueDate?: string;
+  priority?: string;
+  position: number;
+}
+
+export interface CardMoveRequest {
+  columnId: number;
+  position: number;
+}
+
 export interface ColumnResponse {
   id: number;
   title: string;
