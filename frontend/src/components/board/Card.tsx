@@ -1,6 +1,7 @@
-import { useState, type DragEvent } from 'react';
+import { useState, type DragEvent, type MouseEvent } from 'react';
 import type { CardResponse } from '../../api/types';
 import { CardEditForm } from './CardEditForm';
+import { deleteCard } from '../../api/cards';
 
 const PRIORITY_LABEL: Record<string, string> = {
   high: '高',
@@ -23,6 +24,16 @@ export function Card({ card, onUpdated }: CardProps) {
     e.dataTransfer.effectAllowed = 'move';
   };
 
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    try {
+      await deleteCard(card.id);
+      onUpdated();
+    } catch (err) {
+      console.error('カードの削除に失敗しました', err);
+    }
+  };
+
   return (
     <>
       <div
@@ -32,6 +43,14 @@ export function Card({ card, onUpdated }: CardProps) {
         onDragStart={handleDragStart}
         onClick={() => setIsEditing(true)}
       >
+        <button
+          type="button"
+          className="card-delete-button"
+          onClick={handleDelete}
+          aria-label="カードを削除"
+        >
+          ×
+        </button>
         <p className="card-title">{card.title}</p>
         <div className="card-meta">
           <span className={`priority-badge priority-${priorityKey}`}>{priorityLabel}</span>

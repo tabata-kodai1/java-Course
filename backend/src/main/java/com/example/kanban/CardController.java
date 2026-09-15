@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,12 @@ public class CardController {
 	@PatchMapping("/api/cards/{cardId}")
 	public CardResponse updateCard(@PathVariable Long cardId, @Valid @RequestBody CardUpdateRequest request) {
 		return cardService.updateCard(cardId, request);
+	}
+
+	@DeleteMapping("/api/cards/{cardId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteCard(@PathVariable Long cardId) {
+		cardService.deleteCard(cardId);
 	}
 
 	@PatchMapping("/api/cards/{cardId}/move")
