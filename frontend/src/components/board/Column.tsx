@@ -1,4 +1,5 @@
 import { useRef, useState, type DragEvent } from 'react';
+import { deleteColumn, updateColumn } from '../../api/columns';
 import { moveCard, sortColumnByDueDate, sortColumnByPriority } from '../../api/cards';
 import type { ColumnResponse } from '../../api/types';
 import { Card } from './Card';
@@ -8,12 +9,24 @@ interface ColumnProps {
   column: ColumnResponse;
   onCardCreated: () => void;
   onCardUpdated: () => void;
+  onColumnChanged: () => void;
+  selectedCardIds: Set<number>;
+  onToggleCardSelect: (cardId: number) => void;
 }
 
-export function Column({ column, onCardCreated, onCardUpdated }: ColumnProps) {
+export function Column({
+  column,
+  onCardCreated,
+  onCardUpdated,
+  onColumnChanged,
+  selectedCardIds,
+  onToggleCardSelect,
+}: ColumnProps) {
   const sortedCards = [...column.cards].sort((a, b) => a.position - b.position);
   const listRef = useRef<HTMLDivElement>(null);
   const [isBusy, setIsBusy] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [titleInput, setTitleInput] = useState(column.title);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -78,10 +91,56 @@ export function Column({ column, onCardCreated, onCardUpdated }: ColumnProps) {
     }
   };
 
+  const handleTitleSave = async () => {
+    const trimmed = titleInput.trim();
+    if (!trimmed || trimmed === column.title) {
+      setTitleInput(column.title);
+      setIsEditingTitle(false);
+      return;
+    }
+    try {
+      await updateColumn(column.id, { title: trimmed });
+      onColumnChanged();
+    } catch (err) {
+      console.error('列名の変更に失敗しました', err);
+    } finally {
+      setIsEditingTitle(false);
+    }
+  };
+
+  const handleDeleteColumn = async () => {
+    try {
+      await deleteColumn(column.id);
+      onColumnChanged();
+    } catch (err) {
+      console.error('列の削除に失敗しました', err);
+    }
+  };
+
   return (
     <section className="column">
       <div className="column-header">
-        <div className="column-title">{column.title}</div>
+        {isEditingTitle ? (
+          <input
+            type="text"
+            className="column-title-input"
+            value={titleInput}
+            autoFocus
+            onChange={(e) => setTitleInput(e.target.value)}
+            onBlur={handleTitleSave}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleTitleSave();
+              if (e.key === 'Escape') {
+                setTitleInput(column.title);
+                setIsEditingTitle(false);
+              }
+            }}
+          />
+        ) : (
+          <div className="column-title" onClick={() => setIsEditingTitle(true)}>
+            {column.title}
+          </div>
+        )}
         <div className="column-actions">
           <button
             type="button"
@@ -101,13 +160,29 @@ export function Column({ column, onCardCreated, onCardUpdated }: ColumnProps) {
           >
             優先度順
           </button>
+          <button
+            type="button"
+            className="column-delete-button"
+            onClick={handleDeleteColumn}
+            aria-label="列を削除"
+          >
+            ×
+          </button>
         </div>
       </div>
       <div className="card-list" ref={listRef} onDragOver={handleDragOver} onDrop={handleDrop}>
         {sortedCards.length === 0 ? (
           <p className="card-list-empty">該当するカードがありません</p>
         ) : (
-          sortedCards.map((card) => <Card key={card.id} card={card} onUpdated={onCardUpdated} />)
+          sortedCards.map((card) => (
+            <Card
+              key={card.id}
+              card={card}
+              onUpdated={onCardUpdated}
+              isSelected={selectedCardIds.has(card.id)}
+              onToggleSelect={onToggleCardSelect}
+            />
+          ))
         )}
       </div>
       <CardCreateForm columnId={column.id} onCreated={onCardCreated} />
