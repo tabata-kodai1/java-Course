@@ -3,15 +3,16 @@ import { Column } from './Column';
 
 interface BoardProps {
   columns: ColumnResponse[];
+  onCardCreated: () => void;
 }
 
-export function Board({ columns }: BoardProps) {
+export function Board({ columns, onCardCreated }: BoardProps) {
   const sortedColumns = [...columns].sort((a, b) => a.position - b.position);
 
   return (
     <main className="board">
       {sortedColumns.map((column) => (
-        <Column key={column.id} column={column} />
+        <Column key={column.id} column={column} onCardCreated={onCardCreated} />
       ))}
     </main>
   );

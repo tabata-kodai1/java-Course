@@ -17,20 +17,22 @@ export function BoardPage() {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  useEffect(() => {
+  const fetchColumns = () => {
     getColumns(keyword)
       .then(setColumns)
       .catch((err: unknown) => {
         setError(err instanceof Error ? err.message : 'データの取得に失敗しました');
       });
-  }, [keyword]);
+  };
+
+  useEffect(fetchColumns, [keyword]);
 
   return (
     <>
       <AppHeader searchValue={searchInput} onSearchChange={setSearchInput} />
       {error && <p style={{ padding: 20, color: '#dc2626' }}>読み込みエラー: {error}</p>}
       {!error && columns === null && <p style={{ padding: 20 }}>読み込み中...</p>}
-      {!error && columns !== null && <Board columns={columns} />}
+      {!error && columns !== null && <Board columns={columns} onCardCreated={fetchColumns} />}
     </>
   );
 }

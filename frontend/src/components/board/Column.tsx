@@ -1,11 +1,13 @@
 import type { ColumnResponse } from '../../api/types';
 import { Card } from './Card';
+import { CardCreateForm } from './CardCreateForm';
 
 interface ColumnProps {
   column: ColumnResponse;
+  onCardCreated: () => void;
 }
 
-export function Column({ column }: ColumnProps) {
+export function Column({ column, onCardCreated }: ColumnProps) {
   const sortedCards = [...column.cards].sort((a, b) => a.position - b.position);
 
   return (
@@ -20,6 +22,7 @@ export function Column({ column }: ColumnProps) {
           sortedCards.map((card) => <Card key={card.id} card={card} />)
         )}
       </div>
+      <CardCreateForm columnId={column.id} onCreated={onCardCreated} />
     </section>
   );
 }
