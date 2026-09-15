@@ -2,7 +2,7 @@
 
 [要件定義書](requirements.md)に戻る
 
-本アプリはSQLiteデータベースにデータを保存する。テーブルはColumn（列）とCard（カード）の2つで構成し、Card側からColumnを外部キーで参照する1対多の関係を持つ。
+本アプリはPostgreSQLデータベースにデータを保存する。テーブルはColumn（列）とCard（カード）の2つで構成し、Card側からColumnを外部キーで参照する1対多の関係を持つ。
 
 Boardは今回1つのみ存在する想定のため、独立したテーブルとしては持たない（columnsテーブル全体で1つのボードを表す）。将来複数ボードに対応する場合は、`boards`テーブルを追加し、`columns`テーブルに`board_id`（外部キー）を持たせる拡張を想定する。
 
@@ -33,7 +33,7 @@ erDiagram
 
 | カラム名 | 型 | 説明 |
 |---|---|---|
-| id | INTEGER (PK, AUTOINCREMENT) | 列を一意に識別するID |
+| id | BIGINT (PK, IDENTITY) | 列を一意に識別するID |
 | title | TEXT | 列の名前（例：未着手） |
 | position | INTEGER | 列の表示順 |
 
@@ -41,8 +41,8 @@ erDiagram
 
 | カラム名 | 型 | 説明 |
 |---|---|---|
-| id | INTEGER (PK, AUTOINCREMENT) | カードを一意に識別するID |
-| column_id | INTEGER (FK → columns.id) | このカードが属する列のID |
+| id | BIGINT (PK, IDENTITY) | カードを一意に識別するID |
+| column_id | BIGINT (FK → columns.id) | このカードが属する列のID |
 | title | TEXT | カードの名前（必須） |
 | description | TEXT | カードの詳細メモ（任意） |
 | due_date | TEXT | 締め切り日（任意） |
