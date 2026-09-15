@@ -13,79 +13,78 @@ import jakarta.persistence.Table;
 @Table(name = "cards")
 public class Card {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "column_id", nullable = false)
-	private Column column;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "column_id", nullable = false)
+  private Column column;
 
-	@jakarta.persistence.Column(nullable = false)
-	private String title;
+  @jakarta.persistence.Column(nullable = false)
+  private String title;
 
-	@jakarta.persistence.Column(columnDefinition = "text")
-	private String description;
+  @jakarta.persistence.Column(columnDefinition = "text")
+  private String description;
 
-	@jakarta.persistence.Column(name = "due_date")
-	private String dueDate;
+  @jakarta.persistence.Column(name = "due_date")
+  private String dueDate;
 
-	@jakarta.persistence.Column(nullable = false)
-	private String priority = "medium";
+  @jakarta.persistence.Column(nullable = false)
+  private String priority = "medium";
 
-	@jakarta.persistence.Column(nullable = false)
-	private Integer position;
+  @jakarta.persistence.Column(nullable = false)
+  private Integer position;
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public Column getColumn() {
-		return column;
-	}
+  public Column getColumn() {
+    return column;
+  }
 
-	public void setColumn(Column column) {
-		this.column = column;
-	}
+  public void setColumn(Column column) {
+    this.column = column;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public String getDueDate() {
-		return dueDate;
-	}
+  public String getDueDate() {
+    return dueDate;
+  }
 
-	public void setDueDate(String dueDate) {
-		this.dueDate = dueDate;
-	}
+  public void setDueDate(String dueDate) {
+    this.dueDate = dueDate;
+  }
 
-	public String getPriority() {
-		return priority;
-	}
+  public String getPriority() {
+    return priority;
+  }
 
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
+  public void setPriority(String priority) {
+    this.priority = priority;
+  }
 
-	public Integer getPosition() {
-		return position;
-	}
+  public Integer getPosition() {
+    return position;
+  }
 
-	public void setPosition(Integer position) {
-		this.position = position;
-	}
-
+  public void setPosition(Integer position) {
+    this.position = position;
+  }
 }

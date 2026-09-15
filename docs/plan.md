@@ -49,10 +49,13 @@ DBアクセス方式（Spring Data JPA／Spring JDBC）およびPostgreSQLの実
 | POST | /api/columns | 列を新規作成する（末尾に追加） |
 | PATCH | /api/columns/:id | 列のタイトルを更新する |
 | DELETE | /api/columns/:id | 列を削除する（所属するカードも合わせて削除する） |
-| POST | /api/cards | カードを新規作成する（対象の`column_id`を指定） |
-| PATCH | /api/cards/:id | カードの内容（タイトル・説明文・期日）を更新する |
+| POST | /api/columns/:columnId/cards | カードを新規作成する（対象の列の末尾に追加） |
+| PATCH | /api/cards/:id | カードの内容（タイトル・説明文・期日・優先度・並び順）を更新する |
 | PATCH | /api/cards/:id/move | カードの所属列（`column_id`）と並び順（`position`）を更新する（ドラッグ＆ドロップ用） |
 | DELETE | /api/cards/:id | カードを削除する |
+| PATCH | /api/cards/bulk | 複数カード（`cardIds`）の優先度・期日をまとめて更新する（一括更新） |
+| PATCH | /api/columns/:columnId/cards/sort-by-due-date | 指定した列内のカードを期日の早い順に一括で並び替える |
+| PATCH | /api/columns/:columnId/cards/sort-by-priority | 指定した列内のカードを優先度の低い順に一括で並び替える |
 
 `position`は[database.md](database.md)のテーブル定義通り、列は`columns.position`、カードは`cards.position`（列内での並び順）で管理する。
 

@@ -39,3 +39,11 @@ export interface ColumnResponse {
   position: number;
   cards: CardResponse[];
 }
+
+export interface ColumnCreateRequest {
+  title: string;
+}
+
+export interface ColumnUpdateRequest {
+  title: string;
+}

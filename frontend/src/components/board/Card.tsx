@@ -12,9 +12,11 @@ const PRIORITY_LABEL: Record<string, string> = {
 interface CardProps {
   card: CardResponse;
   onUpdated: () => void;
+  isSelected: boolean;
+  onToggleSelect: (cardId: number) => void;
 }
 
-export function Card({ card, onUpdated }: CardProps) {
+export function Card({ card, onUpdated, isSelected, onToggleSelect }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const priorityKey = card.priority ?? 'medium';
   const priorityLabel = PRIORITY_LABEL[priorityKey] ?? priorityKey;
@@ -43,6 +45,14 @@ export function Card({ card, onUpdated }: CardProps) {
         onDragStart={handleDragStart}
         onClick={() => setIsEditing(true)}
       >
+        <input
+          type="checkbox"
+          className="card-select-checkbox"
+          checked={isSelected}
+          onClick={(e) => e.stopPropagation()}
+          onChange={() => onToggleSelect(card.id)}
+          aria-label="カードを選択"
+        />
         <button
           type="button"
           className="card-delete-button"

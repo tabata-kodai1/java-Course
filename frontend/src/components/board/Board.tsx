@@ -5,9 +5,19 @@ interface BoardProps {
   columns: ColumnResponse[];
   onCardCreated: () => void;
   onCardUpdated: () => void;
+  onColumnChanged: () => void;
+  selectedCardIds: Set<number>;
+  onToggleCardSelect: (cardId: number) => void;
 }
 
-export function Board({ columns, onCardCreated, onCardUpdated }: BoardProps) {
+export function Board({
+  columns,
+  onCardCreated,
+  onCardUpdated,
+  onColumnChanged,
+  selectedCardIds,
+  onToggleCardSelect,
+}: BoardProps) {
   const sortedColumns = [...columns].sort((a, b) => a.position - b.position);
 
   return (
@@ -18,6 +28,9 @@ export function Board({ columns, onCardCreated, onCardUpdated }: BoardProps) {
           column={column}
           onCardCreated={onCardCreated}
           onCardUpdated={onCardUpdated}
+          onColumnChanged={onColumnChanged}
+          selectedCardIds={selectedCardIds}
+          onToggleCardSelect={onToggleCardSelect}
         />
       ))}
     </main>
