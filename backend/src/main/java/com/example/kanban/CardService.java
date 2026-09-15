@@ -59,6 +59,18 @@ public class CardService {
 	}
 
 	@Transactional
+	public void deleteCard(Long cardId) {
+		Card card = cardRepository.findById(cardId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found: " + cardId));
+
+		Long columnId = card.getColumn().getId();
+		cardRepository.delete(card);
+
+		List<Card> siblings = cardRepository.findByColumnIdOrderByPositionAsc(columnId);
+		renumber(siblings);
+	}
+
+	@Transactional
 	public CardResponse moveCard(Long cardId, CardMoveRequest request) {
 		Card card = cardRepository.findById(cardId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found: " + cardId));

@@ -20,6 +20,13 @@ export async function postJson<T>(path: string, body: unknown): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+export async function deleteJson(path: string): Promise<void> {
+  const res = await fetch(BASE_URL + path, { method: 'DELETE' });
+  if (!res.ok) {
+    throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+  }
+}
+
 export async function patchJson<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(BASE_URL + path, {
     method: 'PATCH',

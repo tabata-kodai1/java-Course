@@ -132,6 +132,28 @@ body {
   font-size: 14px;
   margin: 0 0 4px 0;
   word-break: break-word;
+  padding-right: 18px;
+}
+
+.card-delete-button {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.card-delete-button:hover {
+  background: var(--card-border);
+  color: var(--text);
 }
 
 .card-due {

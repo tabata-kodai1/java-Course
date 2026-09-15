@@ -1,4 +1,4 @@
-import { patchJson, postJson } from './client';
+import { deleteJson, patchJson, postJson } from './client';
 import type {
   CardBulkUpdateRequest,
   CardCreateRequest,
@@ -13,6 +13,10 @@ export function createCard(columnId: number, request: CardCreateRequest): Promis
 
 export function updateCard(cardId: number, request: CardUpdateRequest): Promise<CardResponse> {
   return patchJson<CardResponse>(`/api/cards/${cardId}`, request);
+}
+
+export function deleteCard(cardId: number): Promise<void> {
+  return deleteJson(`/api/cards/${cardId}`);
 }
 
 export function moveCard(cardId: number, request: CardMoveRequest): Promise<CardResponse> {
