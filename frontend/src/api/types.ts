@@ -7,6 +7,13 @@ export interface CardResponse {
   position: number;
 }
 
+export interface CardCreateRequest {
+  title: string;
+  description?: string;
+  dueDate?: string;
+  priority?: string;
+}
+
 export interface ColumnResponse {
   id: number;
   title: string;

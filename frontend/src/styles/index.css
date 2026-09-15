@@ -144,3 +144,93 @@ body {
   background: #e4f3e6;
   color: #1a7f37;
 }
+
+.card-add-button {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.card-add-button:hover {
+  background: rgba(9, 30, 66, 0.08);
+  color: var(--text);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 30, 66, 0.54);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 20px;
+  width: 360px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(9, 30, 66, 0.25);
+}
+
+.modal-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.card-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-create-form input,
+.card-create-form textarea,
+.card-create-form select {
+  padding: 8px 10px;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.card-create-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.card-create-error {
+  color: #b42318;
+  font-size: 13px;
+  margin: 0;
+}
+
+.card-create-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.card-create-actions button {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.card-create-actions button[type='submit'] {
+  background: #0c66e4;
+  border-color: #0c66e4;
+  color: #fff;
+}
