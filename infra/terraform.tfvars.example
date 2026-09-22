@@ -1,0 +1,8 @@
+# terraform.tfvars のサンプル
+# このファイルをコピーして terraform.tfvars を作成し、実際の値を入力する
+# terraform.tfvars は .gitignore で管理対象外になっている
+
+aws_region   = "ap-northeast-1"
+environment  = "dev"
+project_name = "java-course"
+db_password  = "CHANGE_ME"
