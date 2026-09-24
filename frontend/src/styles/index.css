@@ -89,6 +89,35 @@ body {
   font-weight: 600;
 }
 
+.action-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 24px;
+  background: #fee4e2;
+  border-bottom: 1px solid #fda29b;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.action-error button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-note {
+  margin: 0;
+  padding: 8px 24px;
+  background: #fffaeb;
+  border-bottom: 1px solid var(--card-border);
+  color: #93370d;
+  font-size: 13px;
+}
+
 .board {
   display: flex;
   gap: 16px;

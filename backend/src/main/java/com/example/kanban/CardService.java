@@ -60,7 +60,11 @@ public class CardService {
     if (request.priority() != null && !request.priority().isBlank()) {
       card.setPriority(request.priority());
     }
-    card.setPosition(request.position());
+
+    // 並び順が変わるときだけ、同じ列内で採番し直す(値をそのまま保存すると並び順が重複しうる)
+    if (!request.position().equals(card.getPosition())) {
+      reorderWithinColumn(card, cardId, request.position());
+    }
 
     Card saved = cardRepository.save(card);
     return CardResponse.from(saved);
@@ -102,11 +106,7 @@ public class CardService {
     boolean sameColumn = sourceColumnId.equals(request.columnId());
 
     if (sameColumn) {
-      List<Card> siblings = cardRepository.findByColumnIdOrderByPositionAsc(sourceColumnId);
-      siblings.removeIf(c -> c.getId().equals(cardId));
-      int targetIndex = clampIndex(request.position(), siblings.size());
-      siblings.add(targetIndex, card);
-      renumber(siblings);
+      reorderWithinColumn(card, cardId, request.position());
     } else {
       List<Card> sourceSiblings = cardRepository.findByColumnIdOrderByPositionAsc(sourceColumnId);
       sourceSiblings.removeIf(c -> c.getId().equals(cardId));
@@ -121,6 +121,15 @@ public class CardService {
     }
 
     return CardResponse.from(cardRepository.findById(cardId).orElseThrow());
+  }
+
+  /** カードを同じ列の中で指定位置へ移し、列内の並び順を0から採番し直す。 */
+  private void reorderWithinColumn(Card card, Long cardId, int requestedPosition) {
+    List<Card> siblings = cardRepository.findByColumnIdOrderByPositionAsc(card.getColumn().getId());
+    siblings.removeIf(c -> c.getId().equals(cardId));
+    int targetIndex = clampIndex(requestedPosition, siblings.size());
+    siblings.add(targetIndex, card);
+    renumber(siblings);
   }
 
   private int clampIndex(int index, int size) {

@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -13,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +42,7 @@ class CardServiceTest {
     when(cardRepository.findById(1L)).thenReturn(Optional.of(card));
     when(cardRepository.save(any(Card.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-    CardUpdateRequest request = new CardUpdateRequest("更新後タイトル", "更新後の説明", "2026-02-01", "high", 2);
+    CardUpdateRequest request = new CardUpdateRequest("更新後タイトル", "更新後の説明", "2026-02-01", "high", 0);
 
     CardResponse response = cardService.updateCard(1L, request);
 
@@ -46,7 +50,85 @@ class CardServiceTest {
     assertThat(response.description()).isEqualTo("更新後の説明");
     assertThat(response.dueDate()).isEqualTo("2026-02-01");
     assertThat(response.priority()).isEqualTo("high");
+    assertThat(response.position()).isEqualTo(0);
+    verify(cardRepository, never()).findByColumnIdOrderByPositionAsc(any());
+  }
+
+  @Test
+  void updateCard_renumbersSiblings_whenPositionChanges() {
+    Card first = cardWithId(10L, "first", 0);
+    Card target = cardWithId(1L, "target", 1);
+    Card last = cardWithId(12L, "last", 2);
+    Column column = new Column();
+    for (Card c : List.of(first, target, last)) {
+      c.setColumn(column);
+    }
+
+    when(cardRepository.findById(1L)).thenReturn(Optional.of(target));
+    when(cardRepository.findByColumnIdOrderByPositionAsc(any()))
+        .thenReturn(new ArrayList<>(List.of(first, target, last)));
+    when(cardRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+    when(cardRepository.save(any(Card.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    CardResponse response =
+        cardService.updateCard(1L, new CardUpdateRequest("target", null, null, null, 0));
+
+    assertThat(response.position()).isEqualTo(0);
+    assertThat(first.getPosition()).isEqualTo(1);
+    assertThat(last.getPosition()).isEqualTo(2);
+  }
+
+  @Test
+  void updateCard_clampsPosition_whenOutOfRange() {
+    Card first = cardWithId(10L, "first", 0);
+    Card target = cardWithId(1L, "target", 1);
+    Column column = new Column();
+    first.setColumn(column);
+    target.setColumn(column);
+
+    when(cardRepository.findById(1L)).thenReturn(Optional.of(target));
+    when(cardRepository.findByColumnIdOrderByPositionAsc(any()))
+        .thenReturn(new ArrayList<>(List.of(first, target)));
+    when(cardRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+    when(cardRepository.save(any(Card.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    CardResponse response =
+        cardService.updateCard(1L, new CardUpdateRequest("target", null, null, null, 99));
+
+    assertThat(response.position()).isEqualTo(1);
+    assertThat(first.getPosition()).isEqualTo(0);
+  }
+
+  @Test
+  void moveCard_withinSameColumn_reordersAndRenumbers() {
+    Card first = cardWithId(10L, "first", 0);
+    Card second = cardWithId(11L, "second", 1);
+    Card third = cardWithId(12L, "third", 2);
+    Column column = new Column();
+    ReflectionTestUtils.setField(column, "id", 5L);
+    for (Card c : List.of(first, second, third)) {
+      c.setColumn(column);
+    }
+
+    when(cardRepository.findById(10L)).thenReturn(Optional.of(first), Optional.of(first));
+    when(columnRepository.findById(5L)).thenReturn(Optional.of(column));
+    when(cardRepository.findByColumnIdOrderByPositionAsc(5L))
+        .thenReturn(new ArrayList<>(List.of(first, second, third)));
+    when(cardRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+
+    CardResponse response = cardService.moveCard(10L, new CardMoveRequest(5L, 2));
+
     assertThat(response.position()).isEqualTo(2);
+    assertThat(second.getPosition()).isEqualTo(0);
+    assertThat(third.getPosition()).isEqualTo(1);
+  }
+
+  private static Card cardWithId(Long id, String title, int position) {
+    Card card = new Card();
+    ReflectionTestUtils.setField(card, "id", id);
+    card.setTitle(title);
+    card.setPosition(position);
+    return card;
   }
 
   @Test

@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 interface BulkUpdateToolbarProps {
   selectedCount: number;
-  onApply: (priority?: string, dueDate?: string) => Promise<void> | void;
+  /** 適用に成功したら true を返す(失敗時は入力内容を残す) */
+  onApply: (priority?: string, dueDate?: string) => Promise<boolean>;
   onCancel: () => void;
 }
 
@@ -17,9 +18,11 @@ export function BulkUpdateToolbar({ selectedCount, onApply, onCancel }: BulkUpda
     if (!canApply) return;
     setIsSubmitting(true);
     try {
-      await onApply(priority || undefined, dueDate || undefined);
-      setPriority('');
-      setDueDate('');
+      const succeeded = await onApply(priority || undefined, dueDate || undefined);
+      if (succeeded) {
+        setPriority('');
+        setDueDate('');
+      }
     } finally {
       setIsSubmitting(false);
     }
