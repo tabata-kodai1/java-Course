@@ -12,6 +12,8 @@ interface ColumnProps {
   onColumnChanged: () => void;
   selectedCardIds: Set<number>;
   onToggleCardSelect: (cardId: number) => void;
+  dragDisabled: boolean;
+  onError: (message: string) => void;
 }
 
 export function Column({
@@ -21,6 +23,8 @@ export function Column({
   onColumnChanged,
   selectedCardIds,
   onToggleCardSelect,
+  dragDisabled,
+  onError,
 }: ColumnProps) {
   const sortedCards = [...column.cards].sort((a, b) => a.position - b.position);
   const listRef = useRef<HTMLDivElement>(null);
@@ -29,11 +33,13 @@ export function Column({
   const [titleInput, setTitleInput] = useState(column.title);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    if (dragDisabled) return;
     e.preventDefault();
   };
 
   const handleDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (dragDisabled) return;
     const raw = e.dataTransfer.getData('application/json');
     if (!raw) return;
 
@@ -62,6 +68,7 @@ export function Column({
       onCardUpdated();
     } catch (err) {
       console.error('カードの移動に失敗しました', err);
+      onError('カードの移動に失敗しました。もう一度お試しください。');
     }
   };
 
@@ -73,6 +80,7 @@ export function Column({
       onCardUpdated();
     } catch (err) {
       console.error('期限順の並び替えに失敗しました', err);
+      onError('期限順の並び替えに失敗しました。もう一度お試しください。');
     } finally {
       setIsBusy(false);
     }
@@ -86,6 +94,7 @@ export function Column({
       onCardUpdated();
     } catch (err) {
       console.error('優先度順の並び替えに失敗しました', err);
+      onError('優先度順の並び替えに失敗しました。もう一度お試しください。');
     } finally {
       setIsBusy(false);
     }
@@ -103,6 +112,7 @@ export function Column({
       onColumnChanged();
     } catch (err) {
       console.error('列名の変更に失敗しました', err);
+      onError('列名の変更に失敗しました。もう一度お試しください。');
     } finally {
       setIsEditingTitle(false);
     }
@@ -114,6 +124,7 @@ export function Column({
       onColumnChanged();
     } catch (err) {
       console.error('列の削除に失敗しました', err);
+      onError('列の削除に失敗しました。もう一度お試しください。');
     }
   };
 
@@ -181,6 +192,8 @@ export function Column({
               onUpdated={onCardUpdated}
               isSelected={selectedCardIds.has(card.id)}
               onToggleSelect={onToggleCardSelect}
+              dragDisabled={dragDisabled}
+              onError={onError}
             />
           ))
         )}

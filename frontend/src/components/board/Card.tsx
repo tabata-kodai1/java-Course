@@ -14,9 +14,18 @@ interface CardProps {
   onUpdated: () => void;
   isSelected: boolean;
   onToggleSelect: (cardId: number) => void;
+  dragDisabled: boolean;
+  onError: (message: string) => void;
 }
 
-export function Card({ card, onUpdated, isSelected, onToggleSelect }: CardProps) {
+export function Card({
+  card,
+  onUpdated,
+  isSelected,
+  onToggleSelect,
+  dragDisabled,
+  onError,
+}: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const priorityKey = card.priority ?? 'medium';
   const priorityLabel = PRIORITY_LABEL[priorityKey] ?? priorityKey;
@@ -33,6 +42,7 @@ export function Card({ card, onUpdated, isSelected, onToggleSelect }: CardProps)
       onUpdated();
     } catch (err) {
       console.error('カードの削除に失敗しました', err);
+      onError('カードの削除に失敗しました。もう一度お試しください。');
     }
   };
 
@@ -41,7 +51,7 @@ export function Card({ card, onUpdated, isSelected, onToggleSelect }: CardProps)
       <div
         className="card"
         data-card-id={card.id}
-        draggable
+        draggable={!dragDisabled}
         onDragStart={handleDragStart}
         onClick={() => setIsEditing(true)}
       >

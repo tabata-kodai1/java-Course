@@ -8,6 +8,8 @@ interface BoardProps {
   onColumnChanged: () => void;
   selectedCardIds: Set<number>;
   onToggleCardSelect: (cardId: number) => void;
+  dragDisabled: boolean;
+  onError: (message: string) => void;
 }
 
 export function Board({
@@ -17,6 +19,8 @@ export function Board({
   onColumnChanged,
   selectedCardIds,
   onToggleCardSelect,
+  dragDisabled,
+  onError,
 }: BoardProps) {
   const sortedColumns = [...columns].sort((a, b) => a.position - b.position);
 
@@ -31,6 +35,8 @@ export function Board({
           onColumnChanged={onColumnChanged}
           selectedCardIds={selectedCardIds}
           onToggleCardSelect={onToggleCardSelect}
+          dragDisabled={dragDisabled}
+          onError={onError}
         />
       ))}
     </main>
