@@ -9,7 +9,8 @@
 | `docs/screens.md` | 画面設計(ユースケース、画面要素、ワイヤーフレーム、操作フロー) |
 | `docs/database.md` | ER図・テーブル定義 |
 | `docs/plan.md` | 開発計画、API設計表、ディレクトリ構成 |
-| `docs/tech-stack.md` | 技術選定とその理由(採用/不採用ライブラリを含む) |
+| `docs/tech-stack.md` | 技術選定とその理由(採用/不採用ライブラリを含む)、AWSインフラ構成(構成図・構成要素・`infra/`の構成) |
+| `README.md` | 起動手順、AWSデプロイの手順、プロジェクト構成 |
 
 ## チェック手順
 
@@ -22,6 +23,8 @@
 4. **database.md vs JPAエンティティ**: `Column.java`/`Card.java`のフィールド・アノテーション(`@Column(nullable = ...)`等)が、database.mdのテーブル定義(カラム名・NULL許可・デフォルト値)と一致しているか確認する。
 
 5. **tech-stack.md vs 実際の依存関係**: `backend/build.gradle`・`frontend/package.json`の実際の依存ライブラリが、tech-stack.mdに記載された選定内容(バージョン、採用/不採用の理由)と矛盾していないか確認する。特に「不採用と明記されているもの」(例: dnd-kit)が実装に紛れ込んでいないか。
+
+6. **インフラ関連のドキュメント vs `infra/`**: `docs/tech-stack.md`の「インフラ構成(AWS)」・README「AWSデプロイ」・`docs/features.md`/`docs/requirements.md`の非機能要件・`docs/plan.md`のディレクトリ構成が、実際の`infra/`と矛盾していないか確認する(詳細な突き合わせ項目は`references/terraform-infra.md`の「docsとの整合」を参照)。「自分のパソコン内でのみ動作」「外部に公開しない」のような、AWS環境の存在と矛盾する古い記述が残っていないかもあわせて確認する。
 
 ## 乖離が見つかった場合の分類
 
