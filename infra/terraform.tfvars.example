@@ -2,7 +2,10 @@
 # このファイルをコピーして terraform.tfvars を作成し、実際の値を入力する
 # terraform.tfvars は .gitignore で管理対象外になっている
 
-aws_region   = "ap-northeast-1"
-environment  = "dev"
-project_name = "java-course"
-db_password  = "CHANGE_ME"
+aws_region    = "ap-northeast-1"
+environment   = "dev"
+project_name  = "java-course"
+instance_type = "t3.micro"
+
+# 自分のグローバルIPに置き換える(例: curl https://checkip.amazonaws.com で確認)
+allowed_cidr = "YOUR_IP/32"

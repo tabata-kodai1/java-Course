@@ -1,11 +1,11 @@
-# Terraformのstate管理基盤(S3 + DynamoDB)
+# Terraformのstate保存用S3バケット
 #
 # infra/ 本体を apply する前に、このディレクトリで一度だけ apply して作成する。
 # 本体のstateを管理するリソースを本体と同じstateで管理すると矛盾するため、別ディレクトリ・別stateで管理する。
-# 詳細は docs/aws-deploy-guide.md の「stateをS3+DynamoDBで管理する」を参照
+# 構成の全体像は docs/tech-stack.md の「5. インフラ構成(AWS)」を参照
 
 terraform {
-  required_version = ">= 1.9"
+  required_version = ">= 1.10"
 
   required_providers {
     aws = {
@@ -48,15 +48,4 @@ resource "aws_s3_bucket_public_access_block" "tfstate" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-}
-
-resource "aws_dynamodb_table" "tflock" {
-  name         = "java-course-tflock"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
 }

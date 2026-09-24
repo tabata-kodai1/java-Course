@@ -1,17 +1,30 @@
 # Terraform / AWS プロバイダの設定
-# 詳細は docs/aws-deploy-guide.md の「Terraformのセットアップ」を参照
+# 構成の全体像は docs/tech-stack.md の「5. インフラ構成(AWS)」を参照
 
 terraform {
-  required_version = ">= 1.9"
+  required_version = ">= 1.10"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
   }
 }
 
 provider "aws" {
   region = var.aws_region
+
+  default_tags {
+    tags = {
+      Project     = var.project_name
+      Environment = var.environment
+      ManagedBy   = "terraform"
+    }
+  }
 }
