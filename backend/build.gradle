@@ -8,6 +8,11 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
+// Spring Boot 4.1.1 が決めている版に既知の脆弱性があるため、修正版へ上書きする。
+// Spring Boot が修正版に追従したら、この 2 行を消す。
+ext['tomcat.version'] = '11.0.25'
+ext['jackson-bom.version'] = '3.1.7'
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(25)
